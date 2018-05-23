@@ -111,23 +111,11 @@ io.on('connection', socket => {
 
       console.log('playersCount:', playersCount);
 
-      if (playersCount === 2) {
-        console.log('>>>>>>>>>>> max user');
-      }
-
       gameServer.addRoomPlayer(gameRoomId, socket);
 
       console.log('players:', gameServer.getRoomPlayers(gameRoomId));
 
 
-
-
-      // socket.broadcast
-      //   .in(gameRoomId)
-      //   .emit(events.OPPONENT_ENTRANCE_TO_GAME_ROOM, {
-      //     message: `${socket.username} user has joined to GameRoom`
-      //   });
-      // console.log('gameRooms :', gameRooms);
     });
   } catch (error) {
     console.error('Entrance to the GameRoom error: ', error);

@@ -21,7 +21,12 @@ class GameServer {
     return this.$gameRooms.get(gameRoomId).players
   }
 
+  setRoomPlayerGesture(gameRoomId, playerId, gesture) {
+    this.$gameRooms.get(gameRoomId).setPlayerGesture(playerId, gesture)
+  }
+
   addRoomPlayer(gameRoomId, socket) {
+
     this.getGameRoom(gameRoomId).addPlayer(socket)
   }
 

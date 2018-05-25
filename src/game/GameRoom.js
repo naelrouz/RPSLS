@@ -53,61 +53,79 @@ class GameRoom {
     }, true);
   }
   gameOwer(gameResult) {
-    // console.log('gameResult:', gameResult);
+    console.log('gameResult:', gameResult);
 
-    console.log('SOKET:', this.$players.values().next().value.$socket);
+    // console.log('SOKET:', this.$players.values().next().value.$socket);
 
-    this.$players
-      .values()
-      .next()
-      .value.$socket.broadcast.in(this.$gameRoomId)
-      .emit(events.GAME_OWER, gameResult);
+    // send game result to all players
+    this.$players.forEach(player => {
+      player.$socket.broadcast
+        .in(this.$gameRoomId)
+        .emit(events.GAME_OWER, gameResult);
+    });
   }
   gameResult() {
     const [player2, player1] = this.playersAsArray;
 
+    // if draw
     if (player1.selectedGesture === player2.selectedGesture) {
       return {
-        message: '',
+        message: null,
         players: this.playersAsArray.map(player => ({
           id: player.id,
-          winner: player.winner,
+          winner: false,
           selectedGesture: player.selectedGesture
         }))
       };
     }
 
-    // if the player1 object contains the player2, the user wins
+    // if the player1 object contains the player2, the player1 is wins
     if (
       rules[player1.selectedGesture].hasOwnProperty(player2.selectedGesture)
     ) {
-      // return `player1! ${player1.selectedGesture}  ${rules[player1.selectedGesture][player2.selectedGesture]} ${player2.selectedGesture}`;
-
-      player1.$winner = true;
-
+      // player1.$winner = true;
       return {
         message: `${player1.selectedGesture} ${
           rules[player1.selectedGesture][player2.selectedGesture]
         } ${player2.selectedGesture}`,
-        players: this.playersAsArray.map(player => ({
-          id: player.id,
-          winner: player.$winner,
-          selectedGesture: player.selectedGesture
-        }))
+        players: [
+          {
+            id: player1.id,
+            winner: true,
+            selectedGesture: player1.selectedGesture
+          },
+          {
+            id: player2.id,
+            winner: false,
+            selectedGesture: player2.selectedGesture
+          }
+        ]
       };
     }
 
-    player2.$winner = true;
-
+    // else the player2 wins
+    // player2.$winner = true;
     return {
       message: `${player2.selectedGesture}  ${
         rules[player2.selectedGesture][player1.selectedGesture]
       } ${player1.selectedGesture}`,
-      players: this.playersAsArray.map(player => ({
-        id: player.id,
-        winner: player.winner,
-        selectedGesture: player.selectedGesture
-      }))
+      players: [
+        {
+          id: player1.id,
+          winner: false,
+          selectedGesture: player1.selectedGesture
+        },
+        {
+          id: player2.id,
+          winner: true,
+          selectedGesture: player2.selectedGesture
+        }
+      ]
+      // this.playersAsArray.map(player => ({
+      //   id: player.id,
+      //   winner: player.winner,
+      //   selectedGesture: player.selectedGesture
+      // }))
     };
   }
   // sendGameResults() {

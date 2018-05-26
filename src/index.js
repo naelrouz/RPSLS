@@ -100,6 +100,12 @@ io.on('connection', socket => {
     }
   });
 
+  // socket.on('m', message => {
+  //   console.log('>> message: ', message);
+
+  //   // this.sendMessage(message);
+  // });
+
   // Listen on disconnect (end game if participant is disconnect?)
   socket.on('disconnect', () => {
     console.log('user disconnected');

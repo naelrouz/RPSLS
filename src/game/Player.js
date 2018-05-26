@@ -11,6 +11,9 @@ class Player {
   get username() {
     return this.$socket.username;
   }
+  get socket() {
+    return this.$socket;
+  }
   get id() {
     return this.$socket.id;
   }

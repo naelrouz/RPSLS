@@ -1,4 +1,5 @@
 import Player from './Player';
+import GameRoomChat from './GameRoomChat';
 
 import rules from './gameRules';
 
@@ -9,6 +10,7 @@ class GameRoom {
     this.$gameRoomId = gameRoomId;
     this.$maxPlayersCount = 2;
     this.$players = new Map();
+    this.$GameRoomChat = null;
   }
   get id() {
     return this.$gameRoomId;
@@ -24,7 +26,7 @@ class GameRoom {
     // TODO ? if such a player already exists 'This player already exists'
 
     // if the maximum number of players is exceeded
-    if (this.$players.size === this.$maxPlayersCount) {
+    if (this.isAllPlayersEnterTheGameRoom()) {
       // throw new Error('Maximum number of players exceeded')
       console.error('Maximum number of players exceeded');
       return;
@@ -39,9 +41,16 @@ class GameRoom {
       .emit(events.OPPONENT_ENTRANCE_TO_GAME_ROOM, {
         message: `${socket.username} user has joined to GameRoom`
       });
+
+    if (this.isAllPlayersEnterTheGameRoom()) {
+      this.$gameRoomChat = new GameRoomChat(this.id, this.players);
+    }
   }
   getPlayer(playerId) {
     return this.$players.get(playerId);
+  }
+  isAllPlayersEnterTheGameRoom() {
+    return this.$players.size === this.$maxPlayersCount;
   }
   // check whether all participants in the game choice or gesture
   isAllPlayersSelectedGestures() {

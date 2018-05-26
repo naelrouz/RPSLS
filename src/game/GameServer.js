@@ -17,9 +17,6 @@ class GameServer {
   // get a game room by id
   getGameRoom(gameRoomId) {
     if (!this.$gameRooms.get(gameRoomId)) {
-      // console.error('there is no room with such id');
-      // return false;
-
       throw new Error('there is no room with such id');
     }
 
@@ -38,10 +35,6 @@ class GameServer {
 
   // when clicking on the invitation, a player is added to the game room
   addRoomPlayer(gameRoomId, socket) {
-    console.log('addRoomPlayer.gameRoomId:', gameRoomId);
-
-    // TODO
-
     this.getGameRoom(gameRoomId).addPlayer(socket);
   }
 

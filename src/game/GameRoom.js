@@ -43,21 +43,17 @@ class GameRoom {
   getPlayer(playerId) {
     return this.$players.get(playerId);
   }
+  // check whether all participants in the game choice or gesture
   isAllPlayersSelectedGestures() {
     return Array.from(this.$players.values()).reduce((result, player) => {
       if (!result) {
         return result;
       }
-
       return !!player.selectedGesture;
     }, true);
   }
+  // send game result to all players
   gameOwer(gameResult) {
-    console.log('gameResult:', gameResult);
-
-    // console.log('SOKET:', this.$players.values().next().value.$socket);
-
-    // send game result to all players
     this.$players.forEach(player => {
       player.$socket.broadcast
         .in(this.$gameRoomId)
@@ -67,8 +63,9 @@ class GameRoom {
   gameResult() {
     const [player2, player1] = this.playersAsArray;
 
-    // if draw
+    // if players chose the same gestures, then draw
     if (player1.selectedGesture === player2.selectedGesture) {
+      // return this result game if draw
       return {
         message: null,
         players: this.playersAsArray.map(player => ({
@@ -79,11 +76,11 @@ class GameRoom {
       };
     }
 
-    // if the player1 object contains the player2, the player1 is wins
+    // If the object from the selected gesture of the  player-1 contains the player-2 gesture, then player-1 is win.
     if (
       rules[player1.selectedGesture].hasOwnProperty(player2.selectedGesture)
     ) {
-      // player1.$winner = true;
+      // return this result game if player 1 is winner
       return {
         message: `${player1.selectedGesture} ${
           rules[player1.selectedGesture][player2.selectedGesture]
@@ -103,8 +100,7 @@ class GameRoom {
       };
     }
 
-    // else the player2 wins
-    // player2.$winner = true;
+    // return this result game if player 2 is winner
     return {
       message: `${player2.selectedGesture}  ${
         rules[player2.selectedGesture][player1.selectedGesture]
@@ -121,16 +117,9 @@ class GameRoom {
           selectedGesture: player2.selectedGesture
         }
       ]
-      // this.playersAsArray.map(player => ({
-      //   id: player.id,
-      //   winner: player.winner,
-      //   selectedGesture: player.selectedGesture
-      // }))
     };
   }
-  // sendGameResults() {
 
-  // }
   setPlayerGesture(playerId, gesture) {
     // if the player has already chosen a gesture
     if (this.$players.get(playerId).selectedGesture) {
@@ -140,15 +129,10 @@ class GameRoom {
     this.$players.get(playerId).selectedGesture = gesture;
 
     // if all players selected gestures
-
-    console.log(
-      'this.isAllPlayersSelectedGestures() : ',
-      this.isAllPlayersSelectedGestures()
-    );
-
     if (this.isAllPlayersSelectedGestures()) {
+      // learn who is winner
       const gameResult = this.gameResult();
-
+      // finish the game
       this.gameOwer(gameResult);
     }
   }

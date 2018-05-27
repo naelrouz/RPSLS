@@ -4,18 +4,16 @@ class GameRoomChat {
   constructor(gameRoomId, players) {
     this.$chatParticipants = players;
     this.$gameRoomId = gameRoomId;
-    this.server = null;
+    // this.server = null;
     this.init();
   }
 
   init() {
-    this.server = this.$chatParticipants.values().next().value.socket.server;
-
-    this.server.emit(events.NEW_MESSAGE, {
-      text: 'Welcome to the game room chat!'
-    });
-
     this.$chatParticipants.forEach(({ socket }) => {
+      socket.emit(events.NEW_MESSAGE, {
+        text: 'Welcome to the game room chat!'
+      });
+
       socket.on('m', message => {
         // console.log('>> message: ', message);
 

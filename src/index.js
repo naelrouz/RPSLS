@@ -21,7 +21,7 @@ Object.keys(middlewares).forEach(middleware => {
   middlewares[middleware].init(app);
 });
 
-const gameServer = new GameServer();
+const gameServer = new GameServer(io);
 
 io.on('connection', socket => {
   console.log(`New user is connected. socketId : ${socket.id}`);
@@ -33,25 +33,6 @@ io.on('connection', socket => {
   // }) => {
   //   console.log('username: ', username);
   //   socket.username = username;
-  // });
-  // TODO
-  // Listen on NEW_MESSAGE
-  // socket.on(events.NEW_MESSAGE, payload => {
-  //   const {
-  //     message
-  //   } = payload;
-  //   const {
-  //     username
-  //   } = socket;
-
-  //   console.log('NEW_MESSAGE.payload: ', payload);
-  //   console.log('message: ', message);
-  //   console.log('username: ', username);
-
-  //   io.emit(events.NEW_MESSAGE, {
-  //     message,
-  //     username
-  //   });
   // });
 
   // > Create GameRoom
@@ -99,12 +80,6 @@ io.on('connection', socket => {
       console.error('setRoomPlayerGesture.error: ', error);
     }
   });
-
-  // socket.on('m', message => {
-  //   console.log('>> message: ', message);
-
-  //   // this.sendMessage(message);
-  // });
 
   // Listen on disconnect (end game if participant is disconnect?)
   socket.on('disconnect', () => {

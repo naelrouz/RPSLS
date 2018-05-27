@@ -4,7 +4,6 @@ import cfg from 'config';
 import colors from 'colors';
 import http from 'http';
 import socketIO from 'socket.io';
-import uniqid from 'uniqid';
 
 import events from './eventConstants';
 import middlewares from './middlewares';

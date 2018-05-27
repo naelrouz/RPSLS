@@ -8,6 +8,15 @@ class GameRoomChat {
     this.init();
   }
 
+  // TODO
+  // Listen on CHANGE_USERNAME
+  // socket.on(events.CHANGE_USERNAME, ({
+  //   username
+  // }) => {
+  //   console.log('username: ', username);
+  //   socket.username = username;
+  // });
+
   init() {
     this.$chatParticipants.forEach(({ socket }) => {
       socket.emit(events.NEW_MESSAGE, {
